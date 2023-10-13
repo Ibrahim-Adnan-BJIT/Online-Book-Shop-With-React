@@ -1,80 +1,48 @@
 import { useState } from "react";
 import "./App.css";
-import CustomTitle from "./components/title";
-import Button from "./components/button.component";
-import { PERSON_INFO } from "./utils/constants";
+import Card from "./components/card.component";
+import ComponentOne from "./components/componentOne";
+import IncrementComponent from "./components/increment";
+import { USER_DATA } from "./data/data";
+import EventPropagation from "./components/evenPropagation";
 
 function App() {
-  var varDetails = {
-    name: "Angkon Kumar Roy",
-    email: "a@gmail.com",
-    phone: "123456",
-    address: {
-      street: "street Details",
-      city: "Dhaka",
-    },
-    tags: ["1", "tag2"],
-  };
+  //logical operations
+  const titleApp = "This is from app";
+  const [countVal, setCountVal] = useState(0);
 
-  console.log("varDetails ", varDetails);
-
-  const [showDetails, setShowDetails] = useState(false);
-  const [personDetails, setPersonDetails] = useState(PERSON_INFO);
-
-  const handlePersonChange = () => {
-    // console.log("Person data change clicked");
-    setPersonDetails({
-      ...personDetails,
-      name: "Changed Name",
-      address: {
-        ...personDetails.address,
-        city: "Khulna",
-      },
-    });
-
-    // changing the details in variables
-    varDetails = {
-      name: "Changed in var",
-      email: "a@gmail.com",
-      phone: "3333333",
-      address: {
-        street: "street Details",
-        city: "Dhaka",
-      },
-      tags: ["1", "tag2"],
-    };
-  };
-
-  const calculateSum = (number1, number2) => {
-    let sum = number1 + number2;
-    sum = sum + 1;
-    return sum;
+  const handleIncrement = (val) => {
+    setCountVal(countVal + val);
   };
 
   return (
     <>
-      <CustomTitle title="Contact Information" textColor="#6002b8" />
-      <p>Name: {personDetails.name}</p>
-      <button
-        onClick={() => {
-          console.log("button pressed  ");
-          setShowDetails(true);
-          const sum = calculateSum(10, 20);
-          console.log(`The sum is ${sum}`);
-          // alert(`The sum is ${sum} the name is ${personDetails.name}`);
-        }}
-      >
-        Show Details
-      </button>
-      {/* <button onClick={handlePersonChange}>Change name</button> */}
-      <Button btnText="Change Info" handleOnClick={handlePersonChange} />
-      {showDetails == true && (
-        <div>
-          <p>Email: {personDetails.email}</p>
-          <p>phone: {personDetails.phone}</p>
-          <p>City: {personDetails.address.city}</p>
-        </div>
-      )}
+      {/* event propagation demo */}
+      <EventPropagation />
+      {/* Callback function demo */}
+      <h1>Passing data from child to parent</h1>
+      <h3>Count Value from app: {countVal}</h3>
+      <IncrementComponent
+        countVal={countVal}
+        handleIncrement={handleIncrement}
+      />
+      {/* Props drilling demo */}
+      <h3>Props drilling demo:</h3>
+      <ComponentOne title={titleApp} />
+      <h1>Use of cards: </h1>
+      {USER_DATA.map((user, index) => {
+        console.log("the indexes:", index);
+
+        return (
+          <Card
+            key={user.id}
+            userId={user.id}
+            title={user.title}
+            body={user.body}
+            tags={user.tags}
+          />
+        );
+      })}
     </>
   );
 }

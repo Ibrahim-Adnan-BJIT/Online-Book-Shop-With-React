@@ -1,4 +1,4 @@
 # frontend-training-java-batch
-This branch contains codes for event listenings, props passing and useState() hook.
+This branch contains codes for event propagation, props drilling, mapping data through components.
 
 Happy Coding!!
