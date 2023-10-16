@@ -1,4 +1,4 @@
 # frontend-training-java-batch
-This branch contains codes for event propagation, props drilling, mapping data through components.
+This branch contains codes for hooks, api calling with axios.
 
 Happy Coding!!

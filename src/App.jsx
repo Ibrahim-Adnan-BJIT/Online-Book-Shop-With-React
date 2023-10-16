@@ -1,49 +1,66 @@
-import { useState } from "react";
-import "./App.css";
-import Card from "./components/card.component";
+import { createContext, useEffect, useState } from "react";
+import "./App.scss";
 import ComponentOne from "./components/componentOne";
-import IncrementComponent from "./components/increment";
-import { USER_DATA } from "./data/data";
-import EventPropagation from "./components/evenPropagation";
+import axios from "axios";
+
+export const MyContext = createContext("");
+export const UserContext = createContext({});
 
 function App() {
-  //logical operations
-  const titleApp = "This is from app";
-  const [countVal, setCountVal] = useState(0);
+  const [counter, setCounter] = useState(0);
+  const [counterTwo, setCounterTwo] = useState(0);
 
-  const handleIncrement = (val) => {
-    setCountVal(countVal + val);
+  const handleIncrement = () => {
+    setCounter((cnt) => cnt + 1);
   };
 
-  return (
-    <>
-      {/* event propagation demo */}
-      <EventPropagation />
-      {/* Callback function demo */}
-      <h1>Passing data from child to parent</h1>
-      <h3>Count Value from app: {countVal}</h3>
-      <IncrementComponent
-        countVal={countVal}
-        handleIncrement={handleIncrement}
-      />
-      {/* Props drilling demo */}
-      <h3>Props drilling demo:</h3>
-      <ComponentOne title={titleApp} />
-      <h1>Use of cards: </h1>
-      {USER_DATA.map((user, index) => {
-        console.log("the indexes:", index);
+  const handleIncrementByTen = () => {
+    setCounterTwo((cnt) => cnt + 10);
+  };
 
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    axios.get("https://reqres.in/api/users").then((resp) => {
+      console.log("Our Response is  ", resp);
+      const data = resp.data;
+      console.log("Our data ", data);
+      console.log("Total items ", data.total);
+      setUsersData(data.data);
+    });
+
+    console.log("The useEffect has been triggered");
+  }, []);
+
+  useEffect(() => {
+    console.log("The UserData ", usersData);
+  }, [usersData]);
+
+  return (
+    <div>
+      <h3>Value: {counter}</h3>
+      <button onClick={handleIncrement}>Increment</button>
+      <h3>Value Increment by Ten: {counterTwo}</h3>
+      <button onClick={handleIncrementByTen}>Increment By Ten</button>
+
+      {/* Context API demo */}
+      <MyContext.Provider value={{ counter, handleIncrement }}>
+        <ComponentOne />
+      </MyContext.Provider>
+      <h1>The users Data</h1>
+
+      {/* API calling */}
+      {usersData[0] && <h2>First person name: {usersData[0].first_name}</h2>}
+      {usersData.map((user) => {
         return (
-          <Card
-            key={user.id}
-            userId={user.id}
-            title={user.title}
-            body={user.body}
-            tags={user.tags}
-          />
+          <div key={user.id} style={{ border: "1px solid" }}>
+            <h4>FirstName: {user.first_name}</h4>
+            <h4>LastName: {user.last_name}</h4>
+            <img src={user.avatar} alt="pic" />
+          </div>
         );
       })}
-    </>
+    </div>
   );
 }
 

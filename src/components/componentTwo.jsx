@@ -1,10 +1,10 @@
 import ComponentThree from "./componentThree";
 
-const ComponentTwo = ({ titleComponentTwo }) => {
+const ComponentTwo = () => {
   return (
     <div>
       This is component Two!!
-      <ComponentThree title={titleComponentTwo} />
+      <ComponentThree />
     </div>
   );
 };
