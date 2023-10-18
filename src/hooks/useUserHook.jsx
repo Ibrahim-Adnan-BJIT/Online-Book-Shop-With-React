@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import axiosInstance from "../utils/axiosInstance";
 
 const useUserHook = () => {
   const [users, setUsers] = useState([]);
   const [errors, setErrors] = useState();
 
   useEffect(() => {
-    axios
-      .get("https://reqres.in/api/users")
+    axiosInstance
+      .get("/users")
       .then((resp) => {
         const data = resp.data;
 

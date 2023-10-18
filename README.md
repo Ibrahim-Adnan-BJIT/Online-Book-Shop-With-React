@@ -1,4 +1,4 @@
 # frontend-training-java-batch
-This branch contains codes for react-router-dom, custom-hooks, api calling with axios.
+This branch contains codes for private routing method, token globalization, configuring axios instance with interceptors, debouncing etc.
 
 Happy Coding!!

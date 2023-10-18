@@ -1,14 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
   return (
     <div>
       {/* <div>Logo</div> */}
 
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <Link to="/">Home</Link>
-        <Link to="/register">Register</Link>
-        <Link to="/login">Login</Link>
+        {token && (
+          <>
+            <Link to="/users">User List</Link>
+            <Link to="/user/search">Search User</Link>
+          </>
+        )}
+        {!token && (
+          <>
+            <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
+          </>
+        )}
+
+        {token && (
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/login");
+            }}
+          >
+            Logout
+          </button>
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ const HomePage = () => {
     <div>
       <h1 style={{ textAlign: "center" }}>Home page</h1>
 
-      <UserList />
+      {/* <UserList /> */}
     </div>
   );
 };
