@@ -1,41 +1,42 @@
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from './authContext'; // Import your AuthContext
+import './Navbar.css'; // Import the custom CSS file
 
-const Header = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+
+const Navbar = () => {
+  const { isLoggedIn, logout } = useAuth();
 
   return (
-    <div>
-      {/* <div>Logo</div> */}
-
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
-        <Link to="/">Home</Link>
-        {token && (
-          <>
-            <Link to="/users">User List</Link>
-            <Link to="/user/search">Search User</Link>
-          </>
-        )}
-        {!token && (
-          <>
-            <Link to="/register">Register</Link>
-            <Link to="/login">Login</Link>
-          </>
-        )}
-
-        {token && (
-          <button
-            onClick={() => {
-              localStorage.removeItem("token");
-              navigate("/login");
-            }}
-          >
-            Logout
-          </button>
-        )}
+    <nav className="navbar navbar-expand-lg navbar-dark bg-black custom-navbar"> {/* Added bg-black class */}
+      <div className="container">
+        <Link className="navbar-brand" onClick={logout} to="/">
+          <h1>Online Book Shop</h1>
+        </Link>
+        <div className="d-flex">
+          {isLoggedIn ? (
+            <>
+              <Link className="btn btn-primary me-2" to="/profile">
+                Profile
+              </Link>
+              <Link className="btn btn-secondary" onClick={logout} to="/login">
+                Logout
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link className="btn btn-primary me-2" to="/register">
+                Sign Up
+              </Link>
+              <Link className="btn btn-secondary" to="/login">
+                Sign In
+              </Link>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
-export default Header;
+export default Navbar;

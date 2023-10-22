@@ -1,47 +1,96 @@
-import { useState } from "react";
-import axiosInstance from "../utils/axiosInstance";
+import React, { useState } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../components/authContext";
+ // Import the useAuth hook
 
-const LoginPage = () => {
+const backgroundStyle = {
+  backgroundImage: 'url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  minHeight: "100vh",
+};
+
+const loginTitleStyle = {
+  color: "Black",
+};
+
+function Login() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login: updateLoginStatus } = useAuth() // Get the login function from useAuth
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log("Loggin in");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-    const userCredential = {
-      email: "eve.holt@reqres.in",
-      password: "cityslicka",
-    };
-
-    axiosInstance.post("/login", userCredential).then((resp) => {
-      const data = resp.data;
-
-      console.log("Response from login ", data);
-      localStorage.setItem("token", data.token);
-      navigate("/");
-    });
+  const login = () => {
+    axios
+      .post("http://localhost:8080/user/login", formData)
+      .then(function (response) {
+        const { Authorization, role, id } = response.data;
+        if (Authorization) {
+          localStorage.setItem("token", Authorization);
+          localStorage.setItem("role", role);
+          localStorage.setItem("id", id);
+         
+          updateLoginStatus();
+          navigate("/dashboard");
+        }
+      })
+      .catch(function (error) {
+        console.error("Login error:", error);
+        toast.error("Login failed. Please try again.");
+      });
   };
 
   return (
-    <div>
-      <h1>Login Page</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-          <h4>Email</h4>
-          <input placeholder="Enter email" />
+    <div style={backgroundStyle}>
+      <div className="container d-flex flex-column justify-content-center" style={{ minHeight: "100vh" }}>
+        <div className="row justify-content-center align-items-center" style={{ flex: 1 }}>
+          <div className="col-md-6">
+            <h2 className="text-center" style={loginTitleStyle}>
+              SignIn Here
+            </h2>
+            <div className="form-group">
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+            <button className="btn btn-primary btn-block" onClick={login}>
+              Login
+            </button>
+          </div>
         </div>
-        <div>
-          <h4>Password</h4>
-          <input placeholder="Enter Password" />
+        <div className="row justify-content-center">
+          <div className="toast-container">
+            {/* Toast messages will appear here */}
+          </div>
         </div>
-
-        <button type="submit">Login</button>
-      </form>
+      </div>
     </div>
   );
-};
+}
 
-export default LoginPage;
+export default Login;
