@@ -18,7 +18,9 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     // Implement your logout logic here, which should set isLoggedIn to false
-    localStorage.removeItem("token"); // Clear the token
+    localStorage.removeItem("token"); 
+    localStorage.removeItem("id");
+    localStorage.removeItem("role");// Clear the token
     setIsLoggedIn(false);
   };
 

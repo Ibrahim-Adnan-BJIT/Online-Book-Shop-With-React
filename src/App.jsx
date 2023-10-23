@@ -16,6 +16,13 @@ import History from "./components/history";
 import BooksList from "./components/bookList";
 import BorrowBook from "./components/borrowBooks";
 import ReturnBook from "./components/returnBook";
+import Review from "./components/feedBack";
+import Reviews from "./components/allReviews";
+import MyFeedback from "./components/myFeedback";
+import UpdateFeedback from "./components/updateFeedback";
+import UserDetailsSearch from "./components/searchUser";
+import AddBook from "./components/addBook";
+import UpdateBook from "./components/updateBook";
 
 
 function App() {
@@ -33,7 +40,13 @@ function App() {
           <Route path="/books" element={<BooksList />} />
           <Route path="/borrow-book/:bookId" element={<BorrowBook />} />
           <Route path="/return-book/:bookId" element={<ReturnBook/>} />
-
+          <Route path="/books/:bookId/review" element={<Review/>} />
+          <Route path="/books/:bookId/allreviews" element={<Reviews/>} />
+          <Route path="/books/reviews/:bookId" element={<MyFeedback/>} />
+          <Route path="/update/:bookId/:feedbackId" element={<UpdateFeedback/>} />
+          <Route path="/search" element={<UserDetailsSearch/>} />
+          <Route path="/create" element={<AddBook/>} />
+          <Route path="/updatebook/:bookId" element={<UpdateBook/>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
